@@ -1,0 +1,26 @@
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Data and logs
+logs/
+data/
+
+# SSL certificates
+nginx/ssl/
+nginx/certbot/
+
+# Fly.io generated files
+fly.toml
+Dockerfile.fly
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo

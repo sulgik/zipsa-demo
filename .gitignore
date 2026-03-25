@@ -12,7 +12,7 @@ nginx/ssl/
 nginx/certbot/
 
 # Fly.io generated files
-fly.toml
+# Note: fly.toml is tracked — contains only non-secret config (no API keys)
 Dockerfile.fly
 
 # OS files

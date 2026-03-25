@@ -10,7 +10,7 @@ primary_region = "nrt"  # Tokyo — closest to Seoul
   LOG_DIR = "logs"
   # "Local" LLM: fast/cheap model via OpenRouter (demo only — not a real trust zone)
   LOCAL_HOST = "https://openrouter.ai/api/v1"
-  LOCAL_MODEL = "qwen/qwen3.5-9b"
+  LOCAL_MODEL = "qwen/qwen-2.5-7b-instruct"
   # External LLM: capable model for complex domain reasoning
   EXTERNAL_PROVIDER = "openai"
   EXTERNAL_MODEL = "anthropic/claude-sonnet-4-5"

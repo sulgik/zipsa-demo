@@ -2,23 +2,27 @@
 
 Live demo deployment for [Zipsa](https://github.com/sulgik/zipsa) — the privacy-preserving AI relay.
 
-This project provides everything needed to deploy a public demo at `demo.zipsa.ai` or similar.
+> **Note on Architecture**
+>
+> Zipsa is designed to run with a **local LLM inside your trust zone** — an on-prem or self-hosted model that never touches external servers. The local LLM handles sensitive queries entirely within your private boundary.
+>
+> This demo is for **evaluation purposes only**. Instead of a trust-zone LLM, it connects to a small external model (via OpenRouter) to simulate local LLM behavior. This means all queries leave the server — the privacy guarantees of a real deployment do not apply here.
+>
+> **Production setup:** Run Zipsa with Ollama or any self-hosted LLM inside your own infrastructure.
 
 ## What This Is
 
 A standalone deployment that:
 - Runs Zipsa relay API publicly on port 8000
 - Runs Gradio monitor dashboard on port 7861 (admin-only)
-- Uses Claude API as the external LLM (Nick's subscription)
-- Optionally uses Ollama Cloud for local model, or runs heuristic-only mode
+- Uses **OpenRouter** for both "local" (small model) and "external" (capable model) LLM routing
 - Nginx reverse proxy with admin authentication
 
 ## Prerequisites
 
 - Docker & Docker Compose
-- Anthropic API key
-- (Optional) Ollama Cloud API key
-- Domain pointed to your server (for HTTPS)
+- OpenRouter API key (https://openrouter.ai)
+- Domain pointed to your server (for HTTPS, optional)
 
 ## Quick Deploy
 

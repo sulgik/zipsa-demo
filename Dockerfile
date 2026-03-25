@@ -18,21 +18,8 @@ RUN mkdir -p logs data
 
 # Inject Basic Auth middleware for demo protection
 COPY auth_middleware.py /app/auth_middleware.py
-RUN python3 -c "
-content = open('/app/main.py').read()
-inject = '''
-# --- Demo Basic Auth (injected by zipsa-demo) ---
-import os as _os
-if _os.environ.get('DEMO_PASSWORD'):
-    from auth_middleware import BasicAuthMiddleware
-    app.add_middleware(BasicAuthMiddleware)
-'''
-# Insert after 'app = FastAPI' line
-import re
-content = re.sub(r'(app\s*=\s*FastAPI\([^)]*\))', r'\1' + inject.replace('\\\\', '\\\\\\\\'), content, count=1)
-open('/app/main.py', 'w').write(content)
-print('Auth middleware injected.')
-"
+COPY inject_auth.py /app/inject_auth.py
+RUN python3 /app/inject_auth.py
 
 EXPOSE 8000
 

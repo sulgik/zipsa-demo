@@ -36,8 +36,48 @@ check_env() {
     # Check required variables
     source "$PROJECT_DIR/.env"
 
-    if [ -z "$ANTHROPIC_API_KEY" ] || [ "$ANTHROPIC_API_KEY" = "your-key-here" ]; then
-        log_error "ANTHROPIC_API_KEY not set in .env"
+    local external_provider="${EXTERNAL_PROVIDER:-openai}"
+
+    if [ -n "$LOCAL_HOST" ] && [ -z "$LOCAL_API_KEY" ]; then
+        log_warn "LOCAL_HOST is set but LOCAL_API_KEY is empty"
+    fi
+
+    case "$external_provider" in
+        anthropic|claude)
+            if [ -z "$ANTHROPIC_API_KEY" ] || [ "$ANTHROPIC_API_KEY" = "your-key-here" ]; then
+                log_error "ANTHROPIC_API_KEY not set in .env for EXTERNAL_PROVIDER=$external_provider"
+                exit 1
+            fi
+            ;;
+        openai)
+            if [ -z "$OPENAI_API_KEY" ] || [ "$OPENAI_API_KEY" = "your-key-here" ]; then
+                log_error "OPENAI_API_KEY not set in .env for EXTERNAL_PROVIDER=openai"
+                exit 1
+            fi
+            ;;
+        gemini)
+            if [ -z "$GEMINI_API_KEY" ] || [ "$GEMINI_API_KEY" = "your-key-here" ]; then
+                log_error "GEMINI_API_KEY not set in .env for EXTERNAL_PROVIDER=gemini"
+                exit 1
+            fi
+            ;;
+        *)
+            log_error "Unsupported EXTERNAL_PROVIDER: $external_provider"
+            exit 1
+            ;;
+    esac
+
+    if [ -n "$OPENROUTER_API_KEY" ]; then
+        if [ -z "$OPENAI_API_KEY" ]; then
+            log_warn "OPENROUTER_API_KEY is set but OPENAI_API_KEY is empty; zipsa expects OPENAI_API_KEY for OpenAI-compatible endpoints"
+        fi
+        if [ -z "$LOCAL_API_KEY" ] && [ -n "$LOCAL_HOST" ]; then
+            log_warn "OPENROUTER_API_KEY is set but LOCAL_API_KEY is empty; local demo routing may fail"
+        fi
+    fi
+
+    if [ -n "$OPENAI_BASE_URL" ] && [ -z "$EXTERNAL_MODEL" ]; then
+        log_warn "OPENAI_BASE_URL is set but EXTERNAL_MODEL is empty"
         exit 1
     fi
 
@@ -137,8 +177,13 @@ EOF
     source "$PROJECT_DIR/.env"
 
     fly secrets set \
-        ANTHROPIC_API_KEY="$ANTHROPIC_API_KEY" \
         ADMIN_TOKEN="$ADMIN_TOKEN" \
+        EXTERNAL_PROVIDER="${EXTERNAL_PROVIDER:-openai}" \
+        ${EXTERNAL_MODEL:+EXTERNAL_MODEL="$EXTERNAL_MODEL"} \
+        ${ANTHROPIC_API_KEY:+ANTHROPIC_API_KEY="$ANTHROPIC_API_KEY"} \
+        ${OPENAI_API_KEY:+OPENAI_API_KEY="$OPENAI_API_KEY"} \
+        ${OPENAI_BASE_URL:+OPENAI_BASE_URL="$OPENAI_BASE_URL"} \
+        ${GEMINI_API_KEY:+GEMINI_API_KEY="$GEMINI_API_KEY"} \
         ${LOCAL_HOST:+LOCAL_HOST="$LOCAL_HOST"} \
         ${LOCAL_API_KEY:+LOCAL_API_KEY="$LOCAL_API_KEY"} \
         ${LOCAL_MODEL:+LOCAL_MODEL="$LOCAL_MODEL"} \

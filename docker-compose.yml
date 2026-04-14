@@ -11,8 +11,13 @@ services:
       - "8000:8000"   # Relay API (proxied by nginx in production)
       - "7861:7861"   # Monitor dashboard (admin only)
     environment:
-      # External LLM (Claude)
-      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      # External LLM
+      - EXTERNAL_PROVIDER=${EXTERNAL_PROVIDER:-openai}
+      - EXTERNAL_MODEL=${EXTERNAL_MODEL:-}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - OPENAI_BASE_URL=${OPENAI_BASE_URL:-}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
 
       # Local LLM (Ollama Cloud or empty for heuristic-only)
       - LOCAL_HOST=${LOCAL_HOST:-}

@@ -21,6 +21,10 @@ COPY auth_middleware.py /app/auth_middleware.py
 COPY inject_auth.py /app/inject_auth.py
 RUN python3 /app/inject_auth.py
 
+# Inject demo announcement banner into the UI
+COPY inject_announce.py /app/inject_announce.py
+RUN python3 /app/inject_announce.py
+
 EXPOSE 8000
 
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -28,15 +28,15 @@ content = content.replace("</style>", css_inject + "\n</style>", 1)
 
 # 2. Insert banner HTML right after <body>
 banner_html = """\n<div id="demo-announce">
-  <span class="ann-label">&#9432;&nbsp;DEMO</span>
+  <span class="ann-label">&#128300;&nbsp;Hybrid Inference Simulation</span>
+  <span style="color:var(--lgray);">Both AIs run in cloud (OpenRouter) &mdash; each playing a different role:</span>
+  <span class="ann-sep">|</span>
   <span>
-    Local AI:&nbsp;<span class="ann-local" id="ann-local">Qwen3.5-27b</span>
-    &nbsp;&mdash;&nbsp;simulating on-prem trust zone (OpenRouter)
+    &#128993;&nbsp;Trust-zone surrogate:&nbsp;<span class="ann-local" id="ann-local">Qwen3.5-27b</span>
   </span>
   <span class="ann-sep">|</span>
   <span>
-    External AI:&nbsp;<span class="ann-external" id="ann-external">Claude Sonnet 4.5</span>
-    &nbsp;&mdash;&nbsp;high-capability cloud model (Anthropic via OpenRouter)
+    &#128309;&nbsp;External cloud AI:&nbsp;<span class="ann-external" id="ann-external">Claude Sonnet 4.5</span>
   </span>
 </div>
 """
